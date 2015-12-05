@@ -34,11 +34,9 @@ var $ = function (selector) {
         break;
       default:
         console.log(selectorChainArray[i], 'must be a tag');
-        var blah = Array.from(document.getElementsByTagName(selectorChainArray[i])[0])
-console.log(typeof blah)
         elements = Array.prototype.slice.call(document.getElementsByTagName(selectorChainArray[i]))
-        // elements.push(document.getElementsByTagName(selectorChainArray[i])[1])
-        // Array.prototype.slice.call(document.childNodes);
+        // F & G fail because it looks for all divs, not selective enough/filter for this.
+        // Black Magic: Array.prototype.slice.call(document.childNodes);
     }
   };
   console.log('elements:', elements)
