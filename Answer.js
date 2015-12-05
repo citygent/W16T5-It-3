@@ -18,7 +18,7 @@ var $ = function (selector) {
 
   // Alternatively, dig through DOM using document.children? Potentially a lot more work but also potentially better for a case not in this test, ie: child selector query.
 
-
+  var foundElements = [];
   var selectorChainArray = [];
                               // RegExp for . or #
   selectorChainArray = selector.split(/(?=\.)|(?=#)/); 
@@ -34,9 +34,12 @@ var $ = function (selector) {
         break;
       default:
         console.log(selectorChainArray[i], 'must be a tag');
+        // console.log(typeof selectorChainArray[i]);
+        elements.push(document.getElementsByTagName(selectorChainArray[i])[0])
     }
   };
   console.log('END CHAIN')
-
+  elements = [].concat.apply([], elements)
+  console.log('elements:', elements)
   return elements;
 }
