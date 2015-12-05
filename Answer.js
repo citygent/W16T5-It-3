@@ -19,5 +19,24 @@ var $ = function (selector) {
   // Alternatively, dig through DOM using document.children? Potentially a lot more work but also potentially better for a case not in this test, ie: child selector query.
 
 
+  var selectorChainArray = [];
+                              // RegExp for . or #
+  selectorChainArray = selector.split(/(?=\.)|(?=#)/); 
+  // console.log(selectorChainArray);
+
+  for (var i = selectorChainArray.length - 1; i >= 0; i--) {
+    switch (selectorChainArray[i][0]) {
+      case ".":
+        console.log(selectorChainArray[i], 'is a class');
+        break;
+      case "#":
+        console.log(selectorChainArray[i], 'is an ID');
+        break;
+      default:
+        console.log(selectorChainArray[i], 'must be a tag');
+    }
+  };
+  console.log('END CHAIN')
+
   return elements;
 }
