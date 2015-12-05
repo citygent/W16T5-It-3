@@ -36,7 +36,7 @@ var $ = function (selector) {
         break;
       case "#":
         // console.log(selectorChainArray[i], 'is an ID');
-        idElement = document.getElementById(selectorChainArray[i].substring(1))
+        idElement.push(document.getElementById(selectorChainArray[i].substring(1)))
         // just have to check this one does a check when called on input tag. EASIEST TO SOLVE?
         break;
       default:
@@ -45,13 +45,29 @@ var $ = function (selector) {
         // F & G fail because it looks for all divs, not selective enough/filter for this.
     }
   };
-  console.log('classElements', classElements)
-  console.log('idElement', idElement)
-  console.log('tagElements', tagElements)
-  var allElements = [classElements, idElement, tagElements]
-  console.log(allElements)
+  // console.log('classElements', classElements)
+  // console.log('idElement', idElement)
+  // console.log('tagElements', tagElements)
+  var allArrays = [classElements, idElement, tagElements]
+  var allElements = [];
+  // console.log(allArrays)
 
-  // what i'm trying won't work because of empty arrays. Might need a long nested if/else. Or to rethink entire function! 
+  for (var i = allArrays.length - 1; i >= 0; i--) {
+    if (allArrays[i].length > 0) {
+      // console.log(allArrays[i])
+      allElements.push(allArrays[i])
+    }
+  };
+  console.log('allElements', allElements)
+
+  if (allElements.length > 0) {
+    elements = allElements.shift().reduce(function(res, v) {
+      if (res.indexOf(v) === -1 && allElements.every(function(a) {
+         return a.indexOf(v) !== -1;
+        })) res.push(v);
+      return res;
+    }, []);
+  }
 
   // console.log('elements:', elements)
   console.log('END CHAIN')
