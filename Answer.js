@@ -34,12 +34,14 @@ var $ = function (selector) {
         break;
       default:
         console.log(selectorChainArray[i], 'must be a tag');
-        // console.log(typeof selectorChainArray[i]);
-        elements.push(document.getElementsByTagName(selectorChainArray[i])[0])
+        var blah = Array.from(document.getElementsByTagName(selectorChainArray[i])[0])
+console.log(typeof blah)
+        elements = Array.prototype.slice.call(document.getElementsByTagName(selectorChainArray[i]))
+        // elements.push(document.getElementsByTagName(selectorChainArray[i])[1])
+        // Array.prototype.slice.call(document.childNodes);
     }
   };
-  console.log('END CHAIN')
-  elements = [].concat.apply([], elements)
   console.log('elements:', elements)
+  console.log('END CHAIN')
   return elements;
 }
