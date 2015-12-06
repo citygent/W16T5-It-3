@@ -1,76 +1,47 @@
 var $ = function (selector) {
-  var elements = [];
-  console.log('START CHAIN FOR ', selector)
-////////////////////////////////////////////////////////////////////
-// Rules:                                                         //
-// 1. Only modify and submit Answer.js                            //
-// 2. You may not use any JavaScript libraries (awww)             //
-// 3. Can't use document.querySelector/document.querySelectorAll  //
-////////////////////////////////////////////////////////////////////
 
   // Pseudo: 
-  //   Break up what selector chain argument is (on . or #)
-  //   Push in order, into array.
+  //   Break up what selector chain argument is (on . or #). Push into array.
   //   Iterate through array, for each: 
-  //     1: Find type, call using relevant getter (getElementsByTagName/getElementsByClassName/getElementById)
+  //     1: Find type, call using relevant getter (getElement ById/sByTagName/sByClassName)
   //     2: Push element to types array
   //   Compare type arrays against each other:
-  //   Push matching elements to elements array.
+  //   Push matching values to elements array.
   //   Return elements array.
 
-  // Alternatively, dig through DOM using document.children? Potentially a lot more work but also potentially better for a case not in this test, ie: child selector query.
+  // Will contain result of call to return. 
+  var elements = []; 
 
-  var selectorChainArray = [];
-  var classElements = [];
-  var idElement = [];
-  var tagElements = [];
+  // Splits selector argument on RegExp for . or #
+  var selectorChain = selector.split(/(?=\.)|(?=#)/); 
 
-  selectorChainArray = selector.split(/(?=\.)|(?=#)/);// RegExp for . or #
+  // For further filtering of selector argument:
+  var idElement = [], classElements = [], tagElements = [];
 
-  for (var i = selectorChainArray.length - 1; i >= 0; i--) {
-    switch (selectorChainArray[i][0]) {
+  // Filters selector chain values into separate arrays. 
+  for (var i = selectorChain.length - 1; i >= 0; i--) {
+    switch (selectorChain[i][0]) {
       case ".":
-        // console.log(selectorChainArray[i], 'is a class');
-        classElements = Array.prototype.slice.call(document.getElementsByClassName(selectorChainArray[i].substring(1)))
-        // B, F & G fail because many elements have classes see line 39
+        classElements = Array.prototype.slice.call(document.getElementsByClassName(selectorChain[i].substring(1)));
         break;
       case "#":
-        // console.log(selectorChainArray[i], 'is an ID');
-        idElement.push(document.getElementById(selectorChainArray[i].substring(1)))
-        // just have to check this one does a check when called on input tag. EASIEST TO SOLVE?
+        idElement.push(document.getElementById(selectorChain[i].substring(1)));
         break;
       default:
-        // console.log(selectorChainArray[i], 'must be a tag');
-        tagElements = Array.prototype.slice.call(document.getElementsByTagName(selectorChainArray[i]))
-        // F & G fail because it looks for all divs, not selective enough/filter for this.
+        tagElements = Array.prototype.slice.call(document.getElementsByTagName(selectorChain[i]));
     }
-  };
-  // console.log('classElements', classElements)
-  // console.log('idElement', idElement)
-  // console.log('tagElements', tagElements)
-  var allArrays = [classElements, idElement, tagElements]
-  var allElements = [];
-  // console.log(allArrays)
-
-  for (var i = allArrays.length - 1; i >= 0; i--) {
-    if (allArrays[i].length > 0) {
-      // console.log(allArrays[i])
-      allElements.push(allArrays[i])
-    }
-  };
-  console.log('allElements', allElements)
-
-  if (allElements.length > 0) {
-    elements = allElements.shift().reduce(function(res, v) {
-      if (res.indexOf(v) === -1 && allElements.every(function(a) {
-         return a.indexOf(v) !== -1;
-        })) res.push(v);
-      return res;
-    }, []);
   }
+  
+  // Combines type arrays into 2d array, excluding empties. 
+  var allArrays = [classElements, idElement, tagElements].filter(function(arr){ return arr.length > 0});
 
-  // console.log('elements:', elements)
-  console.log('END CHAIN')
-  console.log('')
+  // Intersection function, returns only elements present in every type array.
+  elements = allArrays.shift().reduce(function(result, value) {
+    if (result.indexOf(value) === -1 && allArrays.every(function(array) {
+       return array.indexOf(value) !== -1;
+      })) result.push(value);
+    return result;
+  }, []);
+
   return elements;
-}
+};
